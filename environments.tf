@@ -13,7 +13,9 @@ locals {
 
   // Load current environment from config based on workspace
   current_environment = lookup(
-    local.environments_config,
+    // For some reason this is not working without the merge due to some
+    // internal type assumptions.
+    merge({}, local.environments_config),
     local.current_env_name, {}
   )
 }
