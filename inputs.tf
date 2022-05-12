@@ -42,6 +42,46 @@ variable "track_actor_updated" {
   default = false
 }
 
+variable "resource_name_separator" {
+  type    = string
+  default = null
+}
+
+variable "resource_name_prefix_template" {
+  type    = string
+  default = null
+}
+
+variable "resource_name_suffix_template" {
+  type    = string
+  default = null
+}
+
+variable "resource_name_template" {
+  type    = string
+  default = null
+}
+
+variable "tag_name_separator" {
+  type    = string
+  default = null
+}
+
+variable "tag_name_prefix_template" {
+  type    = string
+  default = null
+}
+
+variable "tag_name_suffix_template" {
+  type    = string
+  default = null
+}
+
+variable "tag_name_template" {
+  type    = string
+  default = null
+}
+
 variable "tags" {
   type    = map(string)
   default = {}
