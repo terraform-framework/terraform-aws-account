@@ -12,10 +12,12 @@ data "http" "remote" {
 
 locals {
   // Load local file based configuration
-  config_local = var.local_config_path != null ? {
-    for fname in fileset(var.local_config_path, "*.yml") :
-    element(split(".", basename(fname)), 0) => yamldecode(file(format("%s/%s", var.local_config_path, fname)))
-  } : {}
+  config_local = merge([
+    for path in compact([var.local_config_path]) : {
+      for fname in fileset(path, "*.yml") :
+      element(split(".", basename(fname)), 0) => yamldecode(file(format("%s/%s", path, fname)))
+    }
+  ]...)
 
   // Load remote URL based configuration
   config_remote = var.remote_config_url != null ? merge([
