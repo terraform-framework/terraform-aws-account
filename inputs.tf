@@ -42,6 +42,41 @@ variable "track_actor_updated" {
   default = false
 }
 
+variable "workspace_prefix_format" {
+  type    = string
+  default = null
+}
+
+variable "workspace_env_format" {
+  type    = string
+  default = null
+}
+
+variable "workspace_build_format" {
+  type    = string
+  default = null
+}
+
+variable "workspace_stage_format" {
+  type    = string
+  default = null
+}
+
+variable "workspace_prefix_separator" {
+  type    = string
+  default = null
+}
+
+variable "workspace_build_separator" {
+  type    = string
+  default = null
+}
+
+variable "workspace_stage_separator" {
+  type    = string
+  default = null
+}
+
 variable "resource_name_separator" {
   type    = string
   default = null
