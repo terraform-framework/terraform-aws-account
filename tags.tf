@@ -1,10 +1,4 @@
 locals {
-  // Standard tags to insert
-  standard_tags = {
-    Account     = local.account_name
-    Environment = local.current_env_name
-  }
-
   // Lookup account scoped tags
   account_tags = lookup(local.account_config, "tags", {})
 
@@ -22,12 +16,21 @@ locals {
     Stage = local.current_stage_name
   } : {})
 
+  // Standard tags to insert
+  standard_tags = merge({
+    Account     = local.account_name
+    Environment = local.current_env_name
+  }, local.account_tags, local.env_tags, local.actor_tags)
+
   // Compile all tags together
   tags = merge(
+    // Default tags
     local.standard_tags,
-    local.account_tags,
-    local.env_tags,
-    local.actor_tags,
+
+    // Tags from custom workspace prefix
+    local.workspace_prefix_map,
+
+    // Tags passed into module instance
     var.tags,
   )
 }

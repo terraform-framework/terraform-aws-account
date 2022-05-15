@@ -6,7 +6,7 @@ locals {
   workspace_prefix_format = lookup(
     local.workspace_config,
     "prefix_format",
-    coalesce(var.workspace_prefix_format, "[a-zA-Z0-9-]+"),
+    coalesce(var.workspace_prefix_format, "(?P<testy>[a-zA-Z0-9-]+)"),
   )
 
   // Format for environment name
@@ -65,10 +65,25 @@ locals {
 
   // Create a map from the workspace regex results
   workspace_map = regex(local.workspace_regex, terraform.workspace)
+
+  // List of keys not to use in the workspace prefix
+  reserved_prefix_keys = concat([
+    "prefix",
+    ], [
+    for k in keys(local.standard_tags) : lower(k)
+  ])
+
+  // Workspace prefix can have named capture groups so we
+  // want to store those separte so that we can create
+  // tags from them.
+  workspace_prefix_map = {
+    for k, v in local.workspace_map :
+    k => v if !contains(local.reserved_prefix_keys, lower(k))
+  }
 }
 
 output "workspace" {
-  value = {
+  value = merge({
     prefix = lookup(local.workspace_map, "prefix")
-  }
+  }, local.workspace_prefix_map)
 }
