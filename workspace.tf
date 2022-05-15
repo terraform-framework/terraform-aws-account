@@ -83,7 +83,7 @@ locals {
 }
 
 output "workspace" {
-  value = merge({
+  value = {
     prefix = lookup(local.workspace_map, "prefix")
-  }, local.workspace_prefix_map)
+  }
 }
