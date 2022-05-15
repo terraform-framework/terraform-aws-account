@@ -22,13 +22,19 @@ locals {
     Environment = local.current_env_name
   }, local.account_tags, local.env_tags, local.actor_tags)
 
+  // Remove any workspace prefix values that are null
+  prefix_tags = {
+    for k, v in local.workspace_prefix_map :
+    k => v if v != null
+  }
+
   // Compile all tags together
   tags = merge(
     // Default tags
     local.standard_tags,
 
     // Tags from custom workspace prefix
-    local.workspace_prefix_map,
+    local.prefix_tags,
 
     // Tags passed into module instance
     var.tags,

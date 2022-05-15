@@ -6,7 +6,7 @@ locals {
   workspace_prefix_format = lookup(
     local.workspace_config,
     "prefix_format",
-    coalesce(var.workspace_prefix_format, "(?P<testy>[a-zA-Z0-9-]+)"),
+    coalesce(var.workspace_prefix_format, "[a-zA-Z0-9-]+"),
   )
 
   // Format for environment name
