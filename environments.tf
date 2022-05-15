@@ -5,7 +5,7 @@ locals {
   // Lookup environment name using workspace context unless explicitly overridden.
   // This is useful for `default` workspace scenarios where we're not using the
   // terraform workspaces features.
-  current_env_name = var.workspace_override != null ? var.workspace_override : lookup(local.workspace_map, "environment")
+  current_env_name = coalesce(var.environment_override, lookup(local.workspace_map, "environment"))
 
   // Lookup build and stage names from workspace context
   current_build_name = lookup(local.workspace_map, "build")

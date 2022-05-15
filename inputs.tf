@@ -17,7 +17,7 @@ variable "remote_config_headers" {
   sensitive = true
 }
 
-variable "workspace_override" {
+variable "environment_override" {
   type    = string
   default = null
 }
