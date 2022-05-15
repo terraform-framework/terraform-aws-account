@@ -53,7 +53,7 @@ locals {
 
   // Construct workspace regex from above formats
   workspace_regex = format(
-    "^(%s%s)?(%s)(?:%s(%s))?(?:%s(%s))?$",
+    "^(?:(%s)%s)?(%s)(?:%s(%s))?(?:%s(%s))?$",
     local.workspace_prefix_format,
     local.workspace_prefix_separator,
     local.workspace_env_format,
