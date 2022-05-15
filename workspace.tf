@@ -53,7 +53,7 @@ locals {
 
   // Construct workspace regex from above formats
   workspace_regex = format(
-    "^(?:(%s)%s)?(%s)(?:%s(%s))?(?:%s(%s))?$",
+    "^(?:(?P<prefix>%s)%s)?(?P<environment>%s)(?:%s(?P<build>%s))?(?:%s(?P<stage>%s))?$",
     local.workspace_prefix_format,
     local.workspace_prefix_separator,
     local.workspace_env_format,
@@ -64,12 +64,7 @@ locals {
   )
 
   // Create a map from the workspace regex results
-  workspace_map = zipmap([
-    "prefix",
-    "environment",
-    "build",
-    "stage",
-  ], flatten(regexall(local.workspace_regex, terraform.workspace)))
+  workspace_map = regex(local.workspace_regex, terraform.workspace)
 }
 
 output "workspace" {
