@@ -71,3 +71,9 @@ locals {
     "stage",
   ], flatten(regexall(local.workspace_regex, terraform.workspace)))
 }
+
+output "workspace" {
+  value = {
+    prefix = lookup(local.workspace_map, "prefix")
+  }
+}
