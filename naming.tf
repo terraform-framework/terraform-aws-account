@@ -39,7 +39,7 @@ locals {
   resource_name_prefix_template = lookup(
     local.naming_config,
     "resource_name_prefix_template",
-    coalesce(var.resource_name_prefix_template, "{account}{sep}{environment}"),
+    coalesce(var.resource_name_prefix_template, "{environment}"),
   )
 
   // Load the resource name suffix template from the config
@@ -153,18 +153,18 @@ locals {
 
 output "resource_name" {
   value = {
-    format    = local.resource_name
-    prefix    = local.resource_name_prefix
-    suffix    = local.resource_name_suffix
+    format    = lower(local.resource_name)
+    prefix    = lower(local.resource_name_prefix)
+    suffix    = lower(local.resource_name_suffix)
     separator = local.resource_name_separator
   }
 }
 
 output "tag_name" {
   value = {
-    format    = local.tag_name
-    prefix    = local.tag_name_prefix
-    suffix    = local.tag_name_suffix
+    format    = upper(local.tag_name)
+    prefix    = upper(local.tag_name_prefix)
+    suffix    = upper(local.tag_name_suffix)
     separator = local.tag_name_separator
   }
 }
