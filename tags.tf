@@ -1,4 +1,10 @@
 locals {
+  // Standard tags to insert
+  standard_tags = {
+    Account     = local.account_name
+    Environment = local.current_env_name
+  }
+
   // Lookup account scoped tags
   account_tags = lookup(local.account_config, "tags", {})
 
@@ -18,6 +24,7 @@ locals {
 
   // Compile all tags together
   tags = merge(
+    local.standard_tags,
     local.account_tags,
     local.env_tags,
     local.actor_tags,

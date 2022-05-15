@@ -39,7 +39,7 @@ locals {
   resource_name_prefix_template = lookup(
     local.naming_config,
     "resource_name_prefix_template",
-    coalesce(var.resource_name_prefix_template, "{owner}{sep}{environment}"),
+    coalesce(var.resource_name_prefix_template, "{account}{sep}{environment}"),
   )
 
   // Load the resource name suffix template from the config
@@ -101,7 +101,7 @@ locals {
   tag_name_prefix_template = lookup(
     local.naming_config,
     "tag_name_prefix_template",
-    coalesce(var.tag_name_prefix_template, "{owner}{sep}{environment}"),
+    coalesce(var.tag_name_prefix_template, "{account}{sep}{environment}"),
   )
 
   // Load the tag name suffix template from the config

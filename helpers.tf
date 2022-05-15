@@ -6,6 +6,10 @@ output "is" {
     for env in toset(concat([
       for account in local.config_data : keys(lookup(account, "environments", {}))
     ]...)) : env => (env == local.current_env_name)
+    }, {
+    (local.current_env_name) = true
+    feature                  = (local.current_build_name != null)
+    stage                    = (local.current_stage_name != null)
   })
 }
 
