@@ -18,6 +18,12 @@ locals {
     merge({}, local.environments_config),
     local.current_env_name, {}
   )
+
+  // Environment scoped domain
+  env_domain = lower(join(".", [
+    lookup(local.current_environment, "subdomain", local.current_env_name),
+    local.root_domain,
+  ]))
 }
 
 output "env" {
@@ -30,5 +36,21 @@ output "env" {
 
     // Stage name
     stage = local.current_stage_name
+
+    // Domain for the environment with build
+    build_domain = lower(join(".", compact([
+      local.current_build_name,
+      local.env_domain,
+    ])))
+
+    // Domain for the environment including stage
+    stage_domain = lower(join(".", compact([
+      local.current_stage_name,
+      local.current_build_name,
+      local.env_domain,
+    ])))
+
+    // Domain scoped just to the environment
+    domain = local.env_domain
   }
 }
