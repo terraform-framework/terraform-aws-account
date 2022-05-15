@@ -26,7 +26,7 @@ locals {
 
   // Merge local and remote configurations. Local always takes
   // presedence over remote configuration.
-  config_data = merge({},
+  config_data = merge(
     local.config_remote,
     local.config_local,
   )
