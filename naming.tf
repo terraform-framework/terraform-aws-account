@@ -121,34 +121,40 @@ locals {
   )
 
   // Construct the tag name prefix from the template
-  tag_name_prefix = join(local.tag_name_separator, compact([
-    for part in split("{sep}", local.tag_name_prefix_template) :
-    format(replace(part, format("/%s/", local.template_keys), "%s"), [
-      for value in flatten(regexall(local.template_keys, part)) :
-      lookup(local.template_vars, value)
-    ]...)
-  ]))
+  tag_name_prefix = join(local.tag_name_separator, [
+    for x in compact([
+      for part in split("{sep}", local.tag_name_prefix_template) :
+      format(replace(part, format("/%s/", local.template_keys), "%s"), [
+        for value in flatten(regexall(local.template_keys, part)) :
+        lookup(local.template_vars, value)
+      ]...)
+    ]) : lookup(var.resource_tag_codes, x, x)
+  ])
 
   // Construct the tag name suffix from the template
-  tag_name_suffix = join(local.tag_name_separator, compact([
-    for part in split("{sep}", local.tag_name_suffix_template) :
-    format(replace(part, format("/%s/", local.template_keys), "%s"), [
-      for value in flatten(regexall(local.template_keys, part)) :
-      lookup(local.template_vars, value)
-    ]...)
-  ]))
+  tag_name_suffix = join(local.tag_name_separator, [
+    for x in compact([
+      for part in split("{sep}", local.tag_name_suffix_template) :
+      format(replace(part, format("/%s/", local.template_keys), "%s"), [
+        for value in flatten(regexall(local.template_keys, part)) :
+        lookup(local.template_vars, value)
+      ]...)
+    ]) : lookup(var.resource_tag_codes, x, x)
+  ])
 
   // Construct the tag name suffix from the template
-  tag_name = join(local.tag_name_separator, compact([
-    for part in split("{sep}", local.tag_name_template) :
-    format(replace(part, format("/%s/", local.template_keys), "%s"), [
-      for value in flatten(regexall(local.template_keys, part)) :
-      lookup(merge(local.template_vars, {
-        prefix = local.tag_name_prefix
-        suffix = local.tag_name_suffix
-      }), value)
-    ]...)
-  ]))
+  tag_name = join(local.tag_name_separator, [
+    for x in compact([
+      for part in split("{sep}", local.tag_name_template) :
+      format(replace(part, format("/%s/", local.template_keys), "%s"), [
+        for value in flatten(regexall(local.template_keys, part)) :
+        lookup(merge(local.template_vars, {
+          prefix = local.tag_name_prefix
+          suffix = local.tag_name_suffix
+        }), value)
+      ]...)
+    ]) : lookup(var.resource_tag_codes, x, x)
+  ])
 }
 
 output "resource_name" {

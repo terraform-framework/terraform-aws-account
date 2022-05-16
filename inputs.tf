@@ -117,6 +117,11 @@ variable "tag_name_template" {
   default = null
 }
 
+variable "resource_tag_codes" {
+  type    = map(string)
+  default = {}
+}
+
 variable "tags" {
   type    = map(string)
   default = {}
