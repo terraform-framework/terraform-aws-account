@@ -9,11 +9,11 @@ locals {
     UpdatedActor = local.actor_name
   } : {})
 
-  // Tags relating to feature builds and stages
+  // Tags relating to feature builds and deployments
   env_tags = merge(local.current_build_name != null ? {
     Build = local.current_build_name
-    } : {}, local.current_stage_name != null ? {
-    Stage = local.current_stage_name
+    } : {}, local.current_deployment_name != null ? {
+    Deployment = local.current_deployment_name
   } : {})
 
   // Standard tags to insert

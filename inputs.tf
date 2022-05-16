@@ -57,7 +57,7 @@ variable "workspace_build_format" {
   default = null
 }
 
-variable "workspace_stage_format" {
+variable "workspace_deployment_format" {
   type    = string
   default = null
 }
@@ -72,7 +72,7 @@ variable "workspace_build_separator" {
   default = null
 }
 
-variable "workspace_stage_separator" {
+variable "workspace_deployment_separator" {
   type    = string
   default = null
 }

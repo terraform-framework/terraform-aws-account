@@ -1,7 +1,7 @@
 locals {
   // Ensure these keys are set always
   default_template_vars = {
-    stage         = ""
+    deployment    = ""
     build         = ""
     created_actor = ""
     updated_actor = ""
@@ -47,7 +47,7 @@ locals {
   resource_name_suffix_template = lookup(
     local.naming_config,
     "resource_name_suffix_template",
-    coalesce(var.resource_name_suffix_template, "{build}{sep}{stage}"),
+    coalesce(var.resource_name_suffix_template, "{build}{sep}{deployment}"),
   )
 
   // Load the resource name template from the config
@@ -109,7 +109,7 @@ locals {
   tag_name_suffix_template = lookup(
     local.naming_config,
     "tag_name_suffix_template",
-    coalesce(var.tag_name_suffix_template, "{build}{sep}{stage}"),
+    coalesce(var.tag_name_suffix_template, "{build}{sep}{deployment}"),
   )
 
   // Load the tag name template from the config

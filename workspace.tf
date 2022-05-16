@@ -23,11 +23,11 @@ locals {
     coalesce(var.workspace_build_format, "[a-zA-Z0-9-]+"),
   )
 
-  // Format for stage name
-  workspace_stage_format = lookup(
+  // Format for deployment name
+  workspace_deployment_format = lookup(
     local.workspace_config,
-    "stage_format",
-    coalesce(var.workspace_stage_format, "[a-zA-Z0-9]+"),
+    "deployment_format",
+    coalesce(var.workspace_deployment_format, "[a-zA-Z0-9]+"),
   )
 
   // Character used to separate workspace
@@ -44,23 +44,23 @@ locals {
     coalesce(var.workspace_build_separator, "_"),
   )
 
-  // Character used to separate stage
-  workspace_stage_separator = lookup(
+  // Character used to separate deployment
+  workspace_deployment_separator = lookup(
     local.workspace_config,
-    "stage_separator",
-    coalesce(var.workspace_stage_separator, ":"),
+    "deployment_separator",
+    coalesce(var.workspace_deployment_separator, ":"),
   )
 
   // Construct workspace regex from above formats
   workspace_regex = format(
-    "^(?:(?P<prefix>%s)%s)?(?P<environment>%s)(?:%s(?P<build>%s))?(?:%s(?P<stage>%s))?$",
+    "^(?:(?P<prefix>%s)%s)?(?P<environment>%s)(?:%s(?P<build>%s))?(?:%s(?P<deployment>%s))?$",
     local.workspace_prefix_format,
     local.workspace_prefix_separator,
     local.workspace_env_format,
     local.workspace_build_separator,
     local.workspace_build_format,
-    local.workspace_stage_separator,
-    local.workspace_stage_format,
+    local.workspace_deployment_separator,
+    local.workspace_deployment_format,
   )
 
   // Create a map from the workspace regex results

@@ -7,9 +7,9 @@ locals {
   // terraform workspaces features.
   current_env_name = coalesce(var.environment_override, lookup(local.workspace_map, "environment"))
 
-  // Lookup build and stage names from workspace context
-  current_build_name = lookup(local.workspace_map, "build")
-  current_stage_name = lookup(local.workspace_map, "stage")
+  // Lookup build and deployment names from workspace context
+  current_build_name      = lookup(local.workspace_map, "build")
+  current_deployment_name = lookup(local.workspace_map, "deployment")
 
   // Load current environment from config based on workspace
   current_environment = lookup(
@@ -34,8 +34,8 @@ output "env" {
     // Virtual build name
     build = local.current_build_name
 
-    // Stage name
-    stage = local.current_stage_name
+    // Deployment name
+    deployment = local.current_deployment_name
 
     // Domain for the environment with build
     build_domain = lower(join(".", compact([
@@ -43,9 +43,9 @@ output "env" {
       local.env_domain,
     ])))
 
-    // Domain for the environment including stage
-    stage_domain = lower(join(".", compact([
-      local.current_stage_name,
+    // Domain for the environment including deployment
+    deployment_domain = lower(join(".", compact([
+      local.current_deployment_name,
       local.current_build_name,
       local.env_domain,
     ])))

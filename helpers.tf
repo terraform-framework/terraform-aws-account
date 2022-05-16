@@ -9,7 +9,7 @@ output "is" {
     }, {
     (local.current_env_name) = true
     feature                  = (local.current_build_name != null)
-    stage                    = (local.current_stage_name != null)
+    deployment               = (local.current_deployment_name != null)
   })
 }
 
