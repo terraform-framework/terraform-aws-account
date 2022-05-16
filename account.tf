@@ -4,7 +4,10 @@ locals {
   account_config = lookup(local.current_config, "account", {})
 
   // Name of the current account
-  account_name = lookup(local.account_config, "name")
+  account_name = lookup(
+    local.account_config, "name",
+    data.aws_caller_identity.this.account_id,
+  )
 }
 
 output "id" {
