@@ -15,7 +15,7 @@ locals {
 
   // Variables from standard and tags
   template_vars = merge(local.default_template_vars, local.tag_vars, {
-    name   = "%s"
+    name   = "!!!"
     prefix = ""
     suffix = ""
   })
@@ -153,7 +153,7 @@ locals {
 
 output "resource_name" {
   value = {
-    format    = lower(local.resource_name)
+    format    = replace(lower(local.resource_name), "/!!!/", "%s")
     prefix    = lower(local.resource_name_prefix)
     suffix    = lower(local.resource_name_suffix)
     separator = local.resource_name_separator
@@ -162,7 +162,7 @@ output "resource_name" {
 
 output "tag_name" {
   value = {
-    format    = upper(local.tag_name)
+    format    = replace(upper(local.tag_name), "/!!!/", "%s")
     prefix    = upper(local.tag_name_prefix)
     suffix    = upper(local.tag_name_suffix)
     separator = local.tag_name_separator
