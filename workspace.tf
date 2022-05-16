@@ -84,6 +84,7 @@ locals {
 
 output "workspace" {
   value = {
-    prefix = lookup(local.workspace_map, "prefix")
+    prefix    = lookup(local.workspace_map, "prefix")
+    separator = local.workspace_prefix_separator
   }
 }
