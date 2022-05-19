@@ -26,8 +26,12 @@ locals {
   ]))
 }
 
+output "envs" {
+  value = keys(local.environments_config)
+}
+
 output "env" {
-  value = {
+  value = merge(local.current_environment, {
     // Name of the environment
     name = local.current_env_name
 
@@ -37,24 +41,34 @@ output "env" {
     // Deployment name
     deployment = local.current_deployment_name
 
-    // Domain for the environment with build
-    build_domain = lower(join(".", compact([
+    // Domain scoped just to the environment
+    domain = local.env_domain
+  })
+}
+
+output "build" {
+  value = {
+    // Name of the environment  build
+    name = local.current_build_name
+
+    // Domain scoped to the build
+    domain = lower(join(".", compact([
       local.current_build_name,
       local.env_domain,
     ])))
+  }
+}
 
-    // Domain for the environment including deployment
+output "deployment" {
+  value = {
+    // Name of the environment deployment
+    name = local.current_deployment_name
+
+    // Domain scoped to the deployment
     deployment_domain = lower(join(".", compact([
       local.current_deployment_name,
       local.current_build_name,
       local.env_domain,
     ])))
-
-    // Domain scoped just to the environment
-    domain = local.env_domain
   }
-}
-
-output "envs" {
-  value = keys(local.environments_config)
 }
