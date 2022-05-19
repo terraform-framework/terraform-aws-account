@@ -13,10 +13,13 @@ data "http" "remote" {
 locals {
   // Load local file based configuration
   config_local = merge([
-    for path in compact([var.local_config_path]) : {
-      for fname in fileset(path, "*.yml") :
+    for path in compact([var.local_config_path]) : merge({
+      for fname in fileset(path, "*.{yml,yaml}") :
       element(split(".", basename(fname)), 0) => yamldecode(file(format("%s/%s", path, fname)))
-    }
+      }, {
+      for fname in fileset(path, "*.json") :
+      element(split(".", basename(fname)), 0) => jsondecode(file(format("%s/%s", path, fname)))
+    })
   ]...)
 
   // Load remote URL based configuration
