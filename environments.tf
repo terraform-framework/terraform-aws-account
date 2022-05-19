@@ -54,3 +54,7 @@ output "env" {
     domain = local.env_domain
   }
 }
+
+output "envs" {
+  value = keys(local.environments_config)
+}
