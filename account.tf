@@ -9,11 +9,3 @@ locals {
     data.aws_caller_identity.this.account_id,
   )
 }
-
-output "id" {
-  value = data.aws_caller_identity.this.account_id
-}
-
-output "name" {
-  value = local.account_name
-}

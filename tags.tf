@@ -40,7 +40,3 @@ locals {
     var.tags,
   )
 }
-
-output "tags" {
-  value = local.tags
-}

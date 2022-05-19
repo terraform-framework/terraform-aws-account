@@ -24,11 +24,3 @@ locals {
   actor_slice   = local.is_assumed_role ? slice(local.actor_parts, 0, 1) : slice(local.actor_parts, 0, local.actor_length - 1)
   actor_session = local.is_assumed_role ? local.actor_parts[local.actor_length - 1] : null
 }
-
-output "actor" {
-  value = {
-    name    = local.actor_name
-    path    = format("%s/", join("/", local.actor_slice))
-    session = local.actor_session
-  }
-}

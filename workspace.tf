@@ -81,10 +81,3 @@ locals {
     k => v if !contains(local.reserved_prefix_keys, lower(k))
   }
 }
-
-output "workspace" {
-  value = {
-    prefix    = lookup(local.workspace_map, "prefix")
-    separator = local.workspace_prefix_separator
-  }
-}

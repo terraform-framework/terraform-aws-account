@@ -6,11 +6,3 @@ data "aws_region" "this" {
 data "aws_availability_zones" "this" {
   state = var.zone_state
 }
-
-output "region" {
-  value = {
-    name        = data.aws_region.this.name
-    description = data.aws_region.this.description
-    zones       = data.aws_availability_zones.this.names
-  }
-}

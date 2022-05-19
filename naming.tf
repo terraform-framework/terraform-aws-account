@@ -156,21 +156,3 @@ locals {
     ]) : lookup(var.resource_tag_codes, x, x)
   ])
 }
-
-output "resource_name" {
-  value = {
-    format    = replace(lower(local.resource_name), "/!!!/", "%s")
-    prefix    = lower(local.resource_name_prefix)
-    suffix    = lower(local.resource_name_suffix)
-    separator = local.resource_name_separator
-  }
-}
-
-output "tag_name" {
-  value = {
-    format    = replace(upper(local.tag_name), "/!!!/", "%s")
-    prefix    = upper(local.tag_name_prefix)
-    suffix    = upper(local.tag_name_suffix)
-    separator = local.tag_name_separator
-  }
-}
