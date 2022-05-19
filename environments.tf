@@ -31,7 +31,7 @@ output "envs" {
 }
 
 output "env" {
-  value = merge(local.current_environment, {
+  value = {
     // Name of the environment
     name = local.current_env_name
 
@@ -43,7 +43,19 @@ output "env" {
 
     // Domain scoped just to the environment
     domain = local.env_domain
-  })
+
+    // Filter network configuration
+    network = {
+      // CIDR block assigned to the whole network
+      cidr_blocks = lookup(local.current_environment, "cidr_blocks", [])
+
+      // Map of subnet group names to subnet CIDR blocks
+      subnets = lookup(local.current_environment, "subnets", {})
+    }
+
+    // Custom configuration
+    custom = lookup(local.current_environment, "custom", {})
+  }
 }
 
 output "build" {
