@@ -1,9 +1,13 @@
 output "id" {
   value = data.aws_caller_identity.this.account_id
+
+  description = "The AWS account ID of the account that corresponds to the credentials being used - the current account."
 }
 
 output "name" {
   value = local.account_name
+
+  description = "The friendly name mapped to the account ID. This is loaded from the specified config, otherwise defaults to the account ID."
 }
 
 output "actor" {
@@ -12,10 +16,14 @@ output "actor" {
     path    = format("%s/", join("/", local.actor_slice))
     session = local.actor_session
   }
+
+  description = "The details of the user or role invoking the AWS API."
 }
 
 output "envs" {
   value = keys(local.environments_config)
+
+  description = "List of all known environments across all configured accounts. This is loaded from the configuration, otherwise it will be an empty list."
 }
 
 output "env" {
@@ -44,6 +52,8 @@ output "env" {
     // Custom configuration
     custom = lookup(local.current_environment, "custom", {})
   }
+
+  description = "Details about the currently selected environment. This will be loaded from configuration and scoped to a particular environment based on the workspace."
 }
 
 output "build" {
@@ -57,6 +67,8 @@ output "build" {
       local.env_domain,
     ])))
   }
+
+  description = "Details about the feature build environment within the currently selected environment."
 }
 
 output "deployment" {
@@ -71,10 +83,14 @@ output "deployment" {
       local.env_domain,
     ])))
   }
+
+  description = "Details about the deployment environment within the currently selected environment."
 }
 
 output "is" {
   value = local.helper_is
+
+  description = "A map of boolean helper outputs to reflect on whether the known accounts and environments are currently selected."
 }
 
 output "ids" {
@@ -82,6 +98,8 @@ output "ids" {
     for id, conf in local.config_data :
     (conf.account.name) => id
   }
+
+  description = "A list of known account IDs from all known configurations."
 }
 
 output "resource_name" {
@@ -91,6 +109,8 @@ output "resource_name" {
     suffix    = lower(local.resource_name_suffix)
     separator = local.resource_name_separator
   }
+
+  description = "An object detailing the naming format and standards for resource names."
 }
 
 output "tag_name" {
@@ -100,6 +120,8 @@ output "tag_name" {
     suffix    = upper(local.tag_name_suffix)
     separator = local.tag_name_separator
   }
+
+  description = "An object detailing the naming format and standards for the `Name` tag."
 }
 
 output "region" {
@@ -108,6 +130,8 @@ output "region" {
     description = data.aws_region.this.description
     zones       = data.aws_availability_zones.this.names
   }
+
+  description = "A map with details about the currently invoked region and it's zones filtered by the `zone_state` variable."
 }
 
 output "root" {
@@ -118,10 +142,14 @@ output "root" {
     // CIDR blocks assigned to the account
     cidr_blocks = lookup(local.account_config, "cidr_blocks", [])
   }
+
+  description = "A map containing account level configuration such as domain name and CIDR ranges."
 }
 
 output "tags" {
   value = local.tags
+
+  description = "A map of key value pairs for all tags to be propogated to resources and modules."
 }
 
 output "workspace" {
@@ -129,4 +157,6 @@ output "workspace" {
     prefix    = lookup(local.workspace_map, "prefix")
     separator = local.workspace_prefix_separator
   }
+
+  description = "A map of workspace details useful for constructing remote state data sources."
 }
