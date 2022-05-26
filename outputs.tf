@@ -23,8 +23,10 @@ output "actor" {
 output "envs" {
   value = {
     for k, v in local.environments_config : k => {
-      cidr_blocks = lookup(v, "cidr_blocks", [])
-      subnets     = lookup(v, "subnets", {})
+      network = {
+        cidr_blocks = lookup(v, "cidr_blocks", [])
+        subnets     = lookup(v, "subnets", {})
+      }
     }
   }
 
