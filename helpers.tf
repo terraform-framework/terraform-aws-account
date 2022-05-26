@@ -15,25 +15,25 @@ locals {
     values(local.helper_is_env),
   ))
 
-  helper_is = merge(
+  helper_is = {
     // Is account helper
-    local.helper_is_account,
+    account = local.helper_is_account
 
     // Is environment helper
-    local.helper_is_env, {
+    env = merge({
       // Special helper to always reflect current env as true
       (local.current_env_name) = true
+    }, local.helper_is_env)
 
-      // Is a build environment
-      build = (local.current_build_name != null)
+    // Is a build environment
+    build = (local.current_build_name != null)
 
-      // Is a deployment environment
-      deployment = (local.current_deployment_name != null)
+    // Is a deployment environment
+    deployment = (local.current_deployment_name != null)
 
-      // Is either account or env unknown to config
-      unknown = local.helper_is_unknown
-    },
-  )
+    // Is either account or env unknown to config
+    unknown = local.helper_is_unknown
+  }
 }
 
 output "unknown" {
