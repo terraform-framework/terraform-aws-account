@@ -21,9 +21,14 @@ output "actor" {
 }
 
 output "envs" {
-  value = keys(local.environments_config)
+  value = {
+    for k, v in local.environments_config : k => {
+      cidr_blocks = lookup(v, "cidr_blocks", [])
+      subnets     = lookup(v, "subnets", {})
+    }
+  }
 
-  description = "List of all known environments across all configured accounts. This is loaded from the configuration, otherwise it will be an empty list."
+  description = "A map of environment names to their network configurations."
 }
 
 output "env" {
