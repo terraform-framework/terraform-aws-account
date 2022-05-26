@@ -23,6 +23,13 @@ output "actor" {
 output "envs" {
   value = {
     for k, v in local.environments_config : k => {
+      name = k
+
+      domain = lower(join(".", [
+        lookup(lookup(local.environments_config, k, {}), "subdomain", k),
+        local.root_domain,
+      ]))
+
       network = {
         cidr_blocks = lookup(v, "cidr_blocks", [])
         subnets     = lookup(v, "subnets", {})
