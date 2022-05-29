@@ -30,5 +30,11 @@ locals {
 
     // Is a deployment environment
     deployment = (local.current_deployment_name != null)
+
+    // Is account and environment unknown to config
+    unknown = !anytrue(concat(
+      values(local.helper_is_account),
+      values(local.helper_is_account),
+    ))
   }
 }
