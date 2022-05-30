@@ -91,7 +91,7 @@ output "deployment" {
     name = local.current_deployment_name
 
     // Domain scoped to the deployment
-    deployment_domain = lower(join(".", compact([
+    domain = lower(join(".", compact([
       local.current_deployment_name,
       local.current_build_name,
       local.env_domain,
