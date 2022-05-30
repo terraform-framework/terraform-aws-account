@@ -47,7 +47,7 @@ output "build" {
           deployment  = ""
         }), value)
       ]...)
-    ])), local.root_domain))
+    ])), local.current_environment.domain))
   }
 
   description = "Details about the feature build environment within the currently selected environment."
@@ -67,7 +67,7 @@ output "deployment" {
           environment = local.current_env_name
         }), value)
       ]...)
-    ])), local.root_domain))
+    ])), local.current_environment.domain))
   }
 
   description = "Details about the deployment environment within the currently selected environment."

@@ -26,11 +26,18 @@ locals {
   // Get naming standards from config
   naming_config = lookup(local.current_config, "naming", {})
 
+  // Load the environment domain template from the config or fallback to the default value
+  domain_template = lookup(
+    local.naming_config,
+    "domain_template",
+    coalesce(var.domain_template, "{environment}")
+  )
+
   // Load the environment subdomain template from the config or fallback to the default value
   subdomain_template = lookup(
     local.naming_config,
     "subdomain_template",
-    coalesce(var.subdomain_template, "{deployment}.{build}.{environment}")
+    coalesce(var.subdomain_template, "{deployment}.{build}")
   )
 
   // Load the resource name separator from the config

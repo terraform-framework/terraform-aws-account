@@ -14,9 +14,9 @@ locals {
       // Environment name
       name = k
 
-      // Fully qualified subdomain for the environment
+      // Fully qualified domain for the environment
       domain = lower(format("%s.%s", join(".", compact([
-        for part in split(".", local.subdomain_template) :
+        for part in split(".", local.domain_template) :
         format(replace(part, format("/%s/", local.template_keys), "%s"), [
           for value in flatten(regexall(local.template_keys, part)) :
           lookup(merge(local.template_vars, {
@@ -49,9 +49,9 @@ locals {
     // Deployment name
     deployment = local.current_deployment_name
 
-    // Fully qualified subdomain for the environment
+    // Fully qualified domain for the environment
     domain = lower(format("%s.%s", join(".", compact([
-      for part in split(".", local.subdomain_template) :
+      for part in split(".", local.domain_template) :
       format(replace(part, format("/%s/", local.template_keys), "%s"), [
         for value in flatten(regexall(local.template_keys, part)) :
         lookup(merge(local.template_vars, {
