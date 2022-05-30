@@ -21,51 +21,13 @@ output "actor" {
 }
 
 output "envs" {
-  value = {
-    for k, v in local.environments_config : k => {
-      name = k
-
-      domain = lower(join(".", [
-        lookup(lookup(local.environments_config, k, {}), "subdomain", k),
-        local.root_domain,
-      ]))
-
-      network = {
-        cidr_blocks = lookup(v, "cidr_blocks", [])
-        subnets     = lookup(v, "subnets", {})
-      }
-    }
-  }
+  value = local.environments
 
   description = "A map of environment names to their network configurations."
 }
 
 output "env" {
-  value = {
-    // Name of the environment
-    name = local.current_env_name
-
-    // Virtual build name
-    build = local.current_build_name
-
-    // Deployment name
-    deployment = local.current_deployment_name
-
-    // Domain scoped just to the environment
-    domain = local.env_domain
-
-    // Filter network configuration
-    network = {
-      // CIDR block assigned to the whole network
-      cidr_blocks = lookup(local.current_environment, "cidr_blocks", [])
-
-      // Map of subnet group names to subnet CIDR blocks
-      subnets = lookup(local.current_environment, "subnets", {})
-    }
-
-    // Custom configuration
-    custom = lookup(local.current_environment, "custom", {})
-  }
+  value = local.current_environment
 
   description = "Details about the currently selected environment. This will be loaded from configuration and scoped to a particular environment based on the workspace."
 }
@@ -76,10 +38,16 @@ output "build" {
     name = local.current_build_name
 
     // Domain scoped to the build
-    domain = lower(join(".", compact([
-      local.current_build_name,
-      local.env_domain,
-    ])))
+    domain = lower(format("%s.%s", join(".", compact([
+      for part in split(".", local.subdomain_template) :
+      format(replace(part, format("/%s/", local.template_keys), "%s"), [
+        for value in flatten(regexall(local.template_keys, part)) :
+        lookup(merge(local.template_vars, {
+          environment = local.current_env_name
+          deployment  = ""
+        }), value)
+      ]...)
+    ])), local.root_domain))
   }
 
   description = "Details about the feature build environment within the currently selected environment."
@@ -91,11 +59,15 @@ output "deployment" {
     name = local.current_deployment_name
 
     // Domain scoped to the deployment
-    domain = lower(join(".", compact([
-      local.current_deployment_name,
-      local.current_build_name,
-      local.env_domain,
-    ])))
+    domain = lower(format("%s.%s", join(".", compact([
+      for part in split(".", local.subdomain_template) :
+      format(replace(part, format("/%s/", local.template_keys), "%s"), [
+        for value in flatten(regexall(local.template_keys, part)) :
+        lookup(merge(local.template_vars, {
+          environment = local.current_env_name
+        }), value)
+      ]...)
+    ])), local.root_domain))
   }
 
   description = "Details about the deployment environment within the currently selected environment."

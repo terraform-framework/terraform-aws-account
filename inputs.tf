@@ -107,6 +107,11 @@ variable "workspace_deployment_separator" {
   description = "Allows overriding the workspace deployment separator on this instance of the module. This option takes precedence any settings set in either the locally or remotely loaded configuration."
 }
 
+variable "subdomain_template" {
+  type    = string
+  default = null
+}
+
 variable "resource_name_separator" {
   type    = string
   default = null
