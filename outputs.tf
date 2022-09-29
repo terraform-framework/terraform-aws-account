@@ -38,16 +38,17 @@ output "build" {
     name = local.current_build_name
 
     // Domain scoped to the build
-    domain = lower(format("%s.%s", join(".", compact([
-      for part in split(".", local.subdomain_template) :
-      format(replace(part, format("/%s/", local.template_keys), "%s"), [
-        for value in flatten(regexall(local.template_keys, part)) :
-        lookup(merge(local.template_vars, {
-          environment = local.current_env_name
-          deployment  = ""
-        }), value)
-      ]...)
-    ])), local.current_environment.domain))
+    domain = lower(join(".", compact([
+      join(".", compact([
+        for part in split(".", local.subdomain_template) :
+        format(replace(part, format("/%s/", local.template_keys), "%s"), [
+          for value in flatten(regexall(local.template_keys, part)) :
+          lookup(merge(local.template_vars, {
+            environment = local.current_env_name
+            deployment  = ""
+          }), value)
+        ]...)
+    ])), local.current_environment.domain])))
   }
 
   description = "Details about the feature build environment within the currently selected environment."
@@ -59,15 +60,16 @@ output "deployment" {
     name = local.current_deployment_name
 
     // Domain scoped to the deployment
-    domain = lower(format("%s.%s", join(".", compact([
-      for part in split(".", local.subdomain_template) :
-      format(replace(part, format("/%s/", local.template_keys), "%s"), [
-        for value in flatten(regexall(local.template_keys, part)) :
-        lookup(merge(local.template_vars, {
-          environment = local.current_env_name
-        }), value)
-      ]...)
-    ])), local.current_environment.domain))
+    domain = lower(join(".", compact([
+      join(".", compact([
+        for part in split(".", local.subdomain_template) :
+        format(replace(part, format("/%s/", local.template_keys), "%s"), [
+          for value in flatten(regexall(local.template_keys, part)) :
+          lookup(merge(local.template_vars, {
+            environment = local.current_env_name
+          }), value)
+        ]...)
+    ])), local.current_environment.domain])))
   }
 
   description = "Details about the deployment environment within the currently selected environment."
