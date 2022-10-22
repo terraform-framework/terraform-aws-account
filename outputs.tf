@@ -148,3 +148,21 @@ output "workspace" {
 
   description = "A map of workspace details useful for constructing remote state data sources."
 }
+
+output "git" {
+  value = var.track_git ? {
+    organization = local.git_org
+    repository   = local.git_repo
+    revision     = try(local.git_commit.revision, null)
+    author = {
+      name  = lookup(local.git_author, "name", null)
+      email = lookup(local.git_author, "email", null)
+    }
+    timestamp = try(
+      formatdate("DD/MM/YYYY hh:mm:ss", local.git_timestamp),
+      local.git_timestamp,
+    )
+  } : null
+
+  description = "A map containing information about the current git repository, revision and author"
+}

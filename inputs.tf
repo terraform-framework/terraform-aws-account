@@ -58,6 +58,13 @@ variable "track_actor_updated" {
   description = "Whether the name of the user or role in which AWS is invoked should have their name propogated via the UpdatedActor tag"
 }
 
+variable "track_git" {
+  type    = bool
+  default = true
+
+  description = "Whether to track details of the git repository in which this module is being used from"
+}
+
 variable "workspace_prefix_format" {
   type    = string
   default = null
