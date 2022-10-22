@@ -60,7 +60,7 @@ variable "track_actor_updated" {
 
 variable "track_git" {
   type    = bool
-  default = true
+  default = false
 
   description = "Whether to track details of the git repository in which this module is being used from"
 }
