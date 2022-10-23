@@ -2,14 +2,14 @@ locals {
   helper_is_account = {
     for id, conf in local.config_data :
     (conf.account.name) => (data.aws_caller_identity.this.account_id == id)
-    if conf.grouping == lookup(local.current_config, "grouping", {})
+    if lookup(conf, "grouping", {}) == lookup(local.current_config, "grouping", {})
   }
 
   helper_is_env = {
     for env in toset(compact(concat([""], [
       for account in local.config_data :
       keys(lookup(account, "environments", {}))
-      if account.grouping == lookup(local.current_config, "grouping", {})
+      if lookup(account, "grouping", {}) == lookup(local.current_config, "grouping", {})
     ]...))) : env => (env == local.current_env_name)
   }
 
