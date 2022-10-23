@@ -5,6 +5,11 @@ variable "local_config_path" {
   description = "Path to a directory containing YAML or JSON config files"
 }
 
+variable "local_config_subpath" {
+  type    = string
+  default = null
+}
+
 variable "remote_config_url" {
   type    = string
   default = null

@@ -84,7 +84,7 @@ output "is" {
 output "ids" {
   value = {
     for id, conf in local.config_data :
-    (conf.account.name) => id
+    (conf.account.name) => id if conf.grouping == lookup(local.current_config, "grouping", {})
   }
 
   description = "A list of known account IDs from all known configurations."
