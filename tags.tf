@@ -19,6 +19,12 @@ locals {
     GitTimestamp    = local.git_updated
   } : {})
 
+  // Tags relating to account grouping
+  grouping_tags = {
+    for k, v in lookup(local.current_config, "grouping", {}) :
+    title(k) => v
+  }
+
   // Tags relating to feature builds and deployments
   env_tags = merge(local.current_build_name != null ? {
     Build = local.current_build_name
@@ -30,7 +36,7 @@ locals {
   standard_tags = merge({
     Account     = local.account_name
     Environment = local.current_env_name
-  }, local.account_tags, local.env_tags, local.actor_tags, local.git_tags)
+  }, local.account_tags, local.env_tags, local.actor_tags, local.git_tags, local.grouping_tags)
 
   // Remove any workspace prefix values that are null
   prefix_tags = {
