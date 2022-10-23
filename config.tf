@@ -11,13 +11,15 @@ data "http" "remote" {
 }
 
 locals {
+  config_subpath = var.local_config_subpath == null ? "" : var.local_config_subpath
+
   // Create subpath matcher from subpath tokens
-  config_subpath_match = replace(var.local_config_subpath, "/{([a-z]+)}/", "*")
+  config_subpath_match = replace(local.config_subpath, "/{([a-z]+)}/", "*")
 
   // Create regex with named capture groups matching placeholder
   // in the subpath string
-  config_path_regex = join("/", concat([var.local_config_path], [
-    for part in split("/", var.local_config_subpath) :
+  config_path_regex = var.local_config_path == null ? "" : join("/", concat([var.local_config_path], [
+    for part in split("/", local.config_subpath) :
     try(
       format("(?P<%s>[a-zA-Z0-9_-]+)", regex("{([a-z]+)}", part)[0]),
       part,
@@ -33,12 +35,12 @@ locals {
     for path in compact([var.local_config_path]) : merge({
       for fname in fileset(path, local.config_path_filter_yaml) :
       element(split(".", basename(fname)), 0) => merge(yamldecode(file(format("%s/%s", path, fname))), {
-        grouping = regex(local.config_path_regex, join("/", [path, fname]))
+        grouping = try(merge(regex(local.config_path_regex, join("/", [path, fname]))), {})
       })
       }, {
       for fname in fileset(path, local.config_path_filter_json) :
       element(split(".", basename(fname)), 0) => merge(jsondecode(file(format("%s/%s", path, fname))), {
-        grouping = regex(local.config_path_regex, join("/", [path, fname]))
+        grouping = try(merge(regex(local.config_path_regex, join("/", [path, fname]))), {})
       })
     })
   ]...)

@@ -13,7 +13,22 @@ locals {
     ]...))) : env => (env == local.current_env_name)
   }
 
-  helper_is = {
+  helper_grouping_keys = try(toset(concat([
+    for acc in local.config_data :
+    keys(lookup(acc, "grouping", {}))
+  ]...)), [])
+
+  helper_is_group = {
+    for key in local.helper_grouping_keys :
+    key => {
+      for value in toset([
+        for acc in local.config_data :
+        lookup(lookup(acc, "grouping", {}), key, [])
+      ]) : value => lookup(lookup(local.current_config, "grouping", {}), key, []) == value
+    }
+  }
+
+  helper_is = merge(local.helper_is_group, {
     // Is account helper
     account = merge({
       unknown = !anytrue(values(local.helper_is_account))
@@ -39,5 +54,5 @@ locals {
       values(local.helper_is_account),
       values(local.helper_is_account),
     ))
-  }
+  })
 }
