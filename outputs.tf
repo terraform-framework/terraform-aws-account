@@ -167,3 +167,7 @@ output "git" {
 
   description = "A map containing information about the current git repository, revision and author"
 }
+
+output "groups" {
+  value = lookup(local.current_config, "grouping", {})
+}
