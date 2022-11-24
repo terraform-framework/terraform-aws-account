@@ -70,6 +70,20 @@ variable "track_git" {
   description = "Whether to track details of the git repository in which this module is being used from"
 }
 
+variable "track_git_actor" {
+  type    = bool
+  default = false
+
+  description = "Whether to track the author of the commit"
+}
+
+variable "track_git_commit" {
+  type    = bool
+  default = false
+
+  description = "Whether to track the commit hash of the git repository"
+}
+
 variable "workspace_prefix_format" {
   type    = string
   default = null

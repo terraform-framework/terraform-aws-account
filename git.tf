@@ -34,16 +34,16 @@ locals {
   git_origin_url = regex(local.url_regex, try(local.git_remotes.remotes.origin.urls.0, ""))
 
   // Extract the parts of the remote url path
-  git_origin_paths = split("/", trimsuffix(trimprefix(local.git_origin_url.path, "/"), ".git"))
+  git_origin_paths = compact(split("/", trimsuffix(trimprefix(local.git_origin_url.path, "/"), ".git")))
 
   // Get the current commit for the git repo
   git_commit = element(flatten([data.git_commit.this.*, {}]), 0)
 
   // Get the organization from the repo path
-  git_org = local.git_origin_paths[0]
+  git_org = try(local.git_origin_paths[0], null)
 
   // Get the repository from the repo path
-  git_repo = local.git_origin_paths[length(local.git_origin_paths) - 1]
+  git_repo = try(local.git_origin_paths[length(local.git_origin_paths) - 1], null)
 
   // Get the commit author
   git_author = try(local.git_commit.author, {})
@@ -55,4 +55,8 @@ locals {
     formatdate("DD/MM/YYYY hh:mm:ss", local.git_timestamp),
     local.git_timestamp,
   )
+}
+
+output "git_origin_paths" {
+  value = local.git_origin_paths
 }

@@ -9,14 +9,18 @@ locals {
     UpdatedActor = local.actor_name
   } : {})
 
+  git_acotr_tags = merge()
+
   // Tags relating to git trackign
   git_tags = merge(var.track_git ? {
-    GitAuthorName   = lookup(local.git_author, "name", null)
-    GitAuthorEmail  = lookup(local.git_author, "email", null)
     GitOrganization = local.git_org
     GitRepository   = local.git_repo
-    GitRevision     = try(local.git_commit.revision, null)
-    GitTimestamp    = local.git_updated
+    } : {}, var.track_git_actor ? {
+    GitAuthorName  = lookup(local.git_author, "name", null)
+    GitAuthorEmail = lookup(local.git_author, "email", null)
+    } : {}, var.track_git_commit ? {
+    GitRevision  = try(local.git_commit.revision, null)
+    GitTimestamp = local.git_updated
   } : {})
 
   // Tags relating to account grouping
