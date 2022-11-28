@@ -85,6 +85,7 @@ output "ids" {
   value = {
     for id, conf in local.config_data :
     (conf.account.name) => id
+    if lookup(conf, "grouping", {}) == lookup(local.current_config, "grouping", {})
   }
 
   description = "A list of known account IDs from all known configurations."
@@ -165,4 +166,8 @@ output "git" {
   } : null
 
   description = "A map containing information about the current git repository, revision and author"
+}
+
+output "groups" {
+  value = lookup(local.current_config, "grouping", {})
 }

@@ -5,6 +5,11 @@ variable "local_config_path" {
   description = "Path to a directory containing YAML or JSON config files"
 }
 
+variable "local_config_subpath" {
+  type    = string
+  default = null
+}
+
 variable "remote_config_url" {
   type    = string
   default = null
@@ -63,6 +68,20 @@ variable "track_git" {
   default = false
 
   description = "Whether to track details of the git repository in which this module is being used from"
+}
+
+variable "track_git_actor" {
+  type    = bool
+  default = false
+
+  description = "Whether to track the author of the commit"
+}
+
+variable "track_git_commit" {
+  type    = bool
+  default = false
+
+  description = "Whether to track the commit hash of the git repository"
 }
 
 variable "workspace_prefix_format" {

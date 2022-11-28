@@ -9,15 +9,25 @@ locals {
     UpdatedActor = local.actor_name
   } : {})
 
+  git_acotr_tags = merge()
+
   // Tags relating to git trackign
   git_tags = merge(var.track_git ? {
-    GitAuthorName   = lookup(local.git_author, "name", null)
-    GitAuthorEmail  = lookup(local.git_author, "email", null)
     GitOrganization = local.git_org
     GitRepository   = local.git_repo
-    GitRevision     = try(local.git_commit.revision, null)
-    GitTimestamp    = local.git_updated
+    } : {}, var.track_git_actor ? {
+    GitAuthorName  = lookup(local.git_author, "name", null)
+    GitAuthorEmail = lookup(local.git_author, "email", null)
+    } : {}, var.track_git_commit ? {
+    GitRevision  = try(local.git_commit.revision, null)
+    GitTimestamp = local.git_updated
   } : {})
+
+  // Tags relating to account grouping
+  grouping_tags = {
+    for k, v in lookup(local.current_config, "grouping", {}) :
+    title(k) => v
+  }
 
   // Tags relating to feature builds and deployments
   env_tags = merge(local.current_build_name != null ? {
@@ -30,7 +40,7 @@ locals {
   standard_tags = merge({
     Account     = local.account_name
     Environment = local.current_env_name
-  }, local.account_tags, local.env_tags, local.actor_tags, local.git_tags)
+  }, local.account_tags, local.env_tags, local.actor_tags, local.git_tags, local.grouping_tags)
 
   // Remove any workspace prefix values that are null
   prefix_tags = {

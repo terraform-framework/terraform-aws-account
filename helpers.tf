@@ -2,15 +2,33 @@ locals {
   helper_is_account = {
     for id, conf in local.config_data :
     (conf.account.name) => (data.aws_caller_identity.this.account_id == id)
+    if lookup(conf, "grouping", {}) == lookup(local.current_config, "grouping", {})
   }
 
   helper_is_env = {
     for env in toset(compact(concat([""], [
-      for account in local.config_data : keys(lookup(account, "environments", {}))
+      for account in local.config_data :
+      keys(lookup(account, "environments", {}))
+      if lookup(account, "grouping", {}) == lookup(local.current_config, "grouping", {})
     ]...))) : env => (env == local.current_env_name)
   }
 
-  helper_is = {
+  helper_grouping_keys = try(toset(concat([
+    for acc in local.config_data :
+    keys(lookup(acc, "grouping", {}))
+  ]...)), [])
+
+  helper_is_group = {
+    for key in local.helper_grouping_keys :
+    key => {
+      for value in toset([
+        for acc in local.config_data :
+        lookup(lookup(acc, "grouping", {}), key, [])
+      ]) : value => lookup(lookup(local.current_config, "grouping", {}), key, []) == value
+    }
+  }
+
+  helper_is = merge(local.helper_is_group, {
     // Is account helper
     account = merge({
       unknown = !anytrue(values(local.helper_is_account))
@@ -36,5 +54,5 @@ locals {
       values(local.helper_is_account),
       values(local.helper_is_account),
     ))
-  }
+  })
 }
