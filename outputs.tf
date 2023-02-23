@@ -171,3 +171,7 @@ output "git" {
 output "groups" {
   value = lookup(local.current_config, "grouping", {})
 }
+
+output "partition" {
+  value = data.aws_partition.this.partition
+}
