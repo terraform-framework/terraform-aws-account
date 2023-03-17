@@ -38,6 +38,7 @@ locals {
 
   // Standard tags to insert
   standard_tags = merge({
+    Region      = data.aws_region.this.name
     Account     = local.account_name
     Environment = local.current_env_name
   }, local.account_tags, local.env_tags, local.actor_tags, local.git_tags, local.grouping_tags)

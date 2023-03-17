@@ -28,10 +28,13 @@ locals {
       ])), local.root_domain))
 
       // Network details for environment
-      network = {
+      network = merge(lookup(v, "regional", false) ? {
+        cidr_blocks = lookup(lookup(v, data.aws_region.this.name, {}), "cidr_blocks", [])
+        subnets     = lookup(lookup(v, data.aws_region.this.name, {}), "subnets", {})
+        } : {
         cidr_blocks = lookup(v, "cidr_blocks", [])
         subnets     = lookup(v, "subnets", {})
-      }
+      })
 
       // Custom properties for the environment
       custom = lookup(v, "custom", {})
