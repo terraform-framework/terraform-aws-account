@@ -10,6 +10,12 @@ output "name" {
   description = "The friendly name mapped to the account ID. This is loaded from the specified config, otherwise defaults to the account ID."
 }
 
+output "remote_state" {
+  value = lookup(local.account_config, "remote_state", {})
+
+  description = "Optional configuration about the remote state backend for the current account."
+}
+
 output "actor" {
   value = {
     name    = local.actor_name
