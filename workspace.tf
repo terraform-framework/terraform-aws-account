@@ -64,7 +64,7 @@ locals {
   )
 
   // Create a map from the workspace regex results
-  workspace_map = regex(local.workspace_regex, terraform.workspace)
+  workspace_map = regex(local.workspace_regex, coalesce(var.workspace_source, terraform.workspace))
 
   // List of keys not to use in the workspace prefix
   reserved_prefix_keys = concat([

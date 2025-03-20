@@ -84,6 +84,11 @@ variable "track_git_commit" {
   description = "Whether to track the commit hash of the git repository"
 }
 
+variable "workspace_source" {
+  type    = string
+  default = null
+}
+
 variable "workspace_prefix_format" {
   type    = string
   default = null
